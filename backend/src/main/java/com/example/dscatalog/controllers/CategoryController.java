@@ -18,7 +18,7 @@ public class CategoryController {
     @Autowired
     private CategoryService service;
 
-    @GetMapping
+    @GetMapping 
     public ResponseEntity<List<Category>> findAll(){
         List<Category> list = new ArrayList<>();
         list = service.findAll();
