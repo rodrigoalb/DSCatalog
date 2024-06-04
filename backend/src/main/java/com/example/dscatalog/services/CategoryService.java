@@ -3,6 +3,7 @@ package com.example.dscatalog.services;
 import com.example.dscatalog.dto.CategoryDTO;
 import com.example.dscatalog.entities.Category;
 import com.example.dscatalog.repositories.CategoryRepository;
+import com.example.dscatalog.services.exceptions.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +28,7 @@ public class CategoryService {
     @Transactional(readOnly = true)
     public CategoryDTO findById(Long id) {
         Optional<Category> obj = repository.findById(id);
-        Category category = obj.get();
+        Category category = obj.orElseThrow(() -> new EntityNotFoundException("Entidade não encontrada"));
 
         return new CategoryDTO(category);
     }
