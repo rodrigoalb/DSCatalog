@@ -3,9 +3,12 @@ package com.example.dscatalog.services;
 import com.example.dscatalog.dto.CategoryDTO;
 import com.example.dscatalog.entities.Category;
 import com.example.dscatalog.repositories.CategoryRepository;
+import com.example.dscatalog.services.exceptions.DatabaseException;
 import com.example.dscatalog.services.exceptions.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -53,6 +56,17 @@ public class CategoryService {
         }
         catch (jakarta.persistence.EntityNotFoundException e) {
             throw new EntityNotFoundException("ID não encontrado" + id);
+        }
+    }
+
+    @Transactional(readOnly = false, propagation = Propagation.SUPPORTS)
+    public void delete(Long id){
+        if (!repository.existsById(id)){
+            throw new EntityNotFoundException("Elemento não encontrado ou inexistente");
+        } try {
+            repository.deleteById(id);
+        } catch (DataIntegrityViolationException e) {
+            throw new DatabaseException("Falha de integridade referencial");
         }
     }
 }
