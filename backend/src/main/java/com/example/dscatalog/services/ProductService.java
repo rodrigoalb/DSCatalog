@@ -1,7 +1,10 @@
 package com.example.dscatalog.services;
 
+import com.example.dscatalog.dto.CategoryDTO;
 import com.example.dscatalog.dto.ProductDTO;
+import com.example.dscatalog.entities.Category;
 import com.example.dscatalog.entities.Product;
+import com.example.dscatalog.repositories.CategoryRepository;
 import com.example.dscatalog.repositories.ProductRepository;
 import com.example.dscatalog.services.exceptions.DatabaseException;
 import com.example.dscatalog.services.exceptions.EntityNotFoundException;
@@ -21,6 +24,9 @@ public class ProductService {
     @Autowired
     private ProductRepository repository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     @Transactional(readOnly = true)
     public Page<ProductDTO> findAllPaged(PageRequest pageRequest){
         Page<Product> list = repository.findAll(pageRequest);
@@ -39,21 +45,43 @@ public class ProductService {
 
     @Transactional
     public ProductDTO insert(ProductDTO dto) {
-        Product category = new Product();
-        //category.setName(dto.getName());
-        repository.save(category);
+        Product product = new Product();
+        product.setName(dto.getName());
+        product.setDescription(dto.getDescription());
+        product.setPrice(dto.getPrice());
+        product.setImgUrl(dto.getImgUrl());
+        product.setDate(dto.getDate());
 
-        return new ProductDTO(category);
+        product.getCategories().clear();
+        for (CategoryDTO catDto : dto.getCategories()){
+            Category category = categoryRepository.getReferenceById(catDto.getId());
+            product.getCategories().add(category);
+        }
+
+        repository.save(product);
+
+        return new ProductDTO(product);
     }
 
     @Transactional
     public ProductDTO update(Long id, ProductDTO dto) {
         try{
-            Product category = repository.getReferenceById(id);
-            //category.setName(dto.getName());
-            repository.save(category);
+            Product product = repository.getReferenceById(id);
+            product.setName(dto.getName());
+            product.setDescription(dto.getDescription());
+            product.setPrice(dto.getPrice());
+            product.setImgUrl(dto.getImgUrl());
+            product.setDate(dto.getDate());
 
-            return new ProductDTO(category);
+            product.getCategories().clear();
+            for (CategoryDTO catDto : dto.getCategories()){
+                Category category = categoryRepository.getReferenceById(catDto.getId());
+                product.getCategories().add(category);
+            }
+
+            repository.save(product);
+
+            return new ProductDTO(product);
         }
         catch (jakarta.persistence.EntityNotFoundException e) {
             throw new EntityNotFoundException("ID não encontrado" + id);
