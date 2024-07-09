@@ -1,33 +1,43 @@
 package com.example.dscatalog.services.Validation;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.example.dscatalog.controllers.exceptions.FieldMessage;
+import com.example.dscatalog.dto.UserDTO;
+import com.example.dscatalog.dto.UserUpdateDTO;
 import com.example.dscatalog.entities.User;
 import com.example.dscatalog.repositories.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-
-import com.example.dscatalog.dto.UserDTO;
-import com.example.dscatalog.controllers.exceptions.FieldMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.servlet.HandlerMapping;
 
-public class UserInsertValidator implements ConstraintValidator<UserInsertValid, UserDTO> {
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+public class UserUpdateValidator implements ConstraintValidator<UserUpdateValid, UserUpdateDTO> {
+
+    @Autowired
+    private HttpServletRequest request;
 
     @Autowired
     private UserRepository repository;
 
     @Override
-    public void initialize(UserInsertValid ann) {
+    public void initialize(UserUpdateValid ann) {
     }
 
     @Override
-    public boolean isValid(UserDTO dto, ConstraintValidatorContext context) {
+    public boolean isValid(UserUpdateDTO dto, ConstraintValidatorContext context) {
+
+        @SuppressWarnings("unchecked")
+        var uriVars = (Map<String, String>) request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
+        long userId = Long.parseLong( uriVars.get("id"));
 
         List<FieldMessage> list = new ArrayList<>();
 
         User user = repository.findByEmail(dto.getEmail());
-        if (user.getEmail() != null){
+        if (user != null && userId != user.getId()){
             list.add(new FieldMessage("email", "Email existente"));
         }
 

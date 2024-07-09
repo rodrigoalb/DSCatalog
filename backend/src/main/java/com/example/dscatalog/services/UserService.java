@@ -3,6 +3,7 @@ package com.example.dscatalog.services;
 import com.example.dscatalog.dto.CategoryDTO;
 import com.example.dscatalog.dto.RoleDTO;
 import com.example.dscatalog.dto.UserDTO;
+import com.example.dscatalog.dto.UserUpdateDTO;
 import com.example.dscatalog.entities.Category;
 import com.example.dscatalog.entities.Role;
 import com.example.dscatalog.entities.User;
@@ -70,7 +71,7 @@ public class UserService {
     }
 
     @Transactional
-    public UserDTO update(Long id, UserDTO dto) {
+    public UserDTO update(Long id, UserUpdateDTO dto) {
         try{
             User user = repository.getReferenceById(id);
             user.setFirstName(dto.getFirstName());
