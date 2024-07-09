@@ -1,12 +1,14 @@
 package com.example.dscatalog.dto;
 
 import com.example.dscatalog.entities.User;
+import com.example.dscatalog.services.Validation.UserInsertValid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
 import java.util.HashSet;
 import java.util.Set;
 
+@UserInsertValid
 public class UserDTO {
 
     private Long id;
