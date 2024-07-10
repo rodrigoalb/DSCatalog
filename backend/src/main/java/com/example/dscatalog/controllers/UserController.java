@@ -1,6 +1,7 @@
 package com.example.dscatalog.controllers;
 
 import com.example.dscatalog.dto.UserDTO;
+import com.example.dscatalog.dto.UserInsertDTO;
 import com.example.dscatalog.dto.UserUpdateDTO;
 import com.example.dscatalog.services.UserService;
 import jakarta.validation.Valid;
@@ -33,10 +34,10 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserDTO> insert(@Valid @RequestBody UserDTO dto){
-        dto = service.insert(dto);
+    public ResponseEntity<UserDTO> insert(@Valid @RequestBody UserInsertDTO dto){
+        UserDTO newDto = service.insert(dto);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(dto.getId()).toUri();
-        return ResponseEntity.created(uri).body(dto);
+        return ResponseEntity.created(uri).body(newDto);
     }
 
     @PutMapping(value = "/{id}")

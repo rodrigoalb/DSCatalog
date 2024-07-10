@@ -1,14 +1,12 @@
 package com.example.dscatalog.dto;
 
 import com.example.dscatalog.entities.User;
-import com.example.dscatalog.services.Validation.UserInsertValid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
 import java.util.HashSet;
 import java.util.Set;
 
-@UserInsertValid
 public class UserDTO {
 
     private Long id;
@@ -17,7 +15,6 @@ public class UserDTO {
     private String lastName;
     @Email(message = "E-mail inválido")
     private String email;
-    private String password;
 
     Set<RoleDTO> roles = new HashSet<>();
 
@@ -25,12 +22,11 @@ public class UserDTO {
 
     }
 
-    public UserDTO(Long id, String firstName, String lastName, String email, String password) {
+    public UserDTO(Long id, String firstName, String lastName, String email) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.password = password;
     }
 
     public UserDTO(User entity) {
@@ -38,7 +34,6 @@ public class UserDTO {
         firstName = entity.getFirstName();
         lastName = entity.getLastName();
         email = entity.getEmail();
-        password = entity.getPassword();
         entity.getRoles().forEach(role -> this.roles.add(new RoleDTO(role)));
     }
 
@@ -72,14 +67,6 @@ public class UserDTO {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public Set<RoleDTO> getRoles() {

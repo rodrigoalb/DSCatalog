@@ -1,9 +1,6 @@
 package com.example.dscatalog.services;
 
-import com.example.dscatalog.dto.CategoryDTO;
-import com.example.dscatalog.dto.RoleDTO;
-import com.example.dscatalog.dto.UserDTO;
-import com.example.dscatalog.dto.UserUpdateDTO;
+import com.example.dscatalog.dto.*;
 import com.example.dscatalog.entities.Category;
 import com.example.dscatalog.entities.Role;
 import com.example.dscatalog.entities.User;
@@ -52,7 +49,7 @@ public class UserService {
     }
 
     @Transactional
-    public UserDTO insert(UserDTO dto) {
+    public UserDTO insert(UserInsertDTO dto) {
         User user = new User();
         user.setFirstName(dto.getFirstName());
         user.setLastName(dto.getLastName());
