@@ -9,7 +9,6 @@ import com.example.dscatalog.repositories.UserRepository;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-import com.example.dscatalog.dto.UserDTO;
 import com.example.dscatalog.controllers.exceptions.FieldMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -28,7 +27,7 @@ public class UserInsertValidator implements ConstraintValidator<UserInsertValid,
         List<FieldMessage> list = new ArrayList<>();
 
         User user = repository.findByEmail(dto.getEmail());
-        if (user.getEmail() != null){
+        if (user != null){
             list.add(new FieldMessage("email", "Email existente"));
         }
 
