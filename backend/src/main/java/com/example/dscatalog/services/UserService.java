@@ -74,7 +74,6 @@ public class UserService {
             user.setFirstName(dto.getFirstName());
             user.setLastName(dto.getLastName());
             user.setEmail(dto.getEmail());
-            user.setPassword(passwordEncoder.encode(dto.getPassword()));
 
             user.getRoles().clear();
             for (RoleDTO roleDto : dto.getRoles()){
